@@ -57,14 +57,22 @@ public class GameApp {
         String name = sc.nextLine();
         System.out.println("Type: 1=Hunt 2=Destruction 3=Preservation 4=Healer 5=Support");
         int t = sc.nextInt();
+        sc.nextLine();
+
+        HeroType type = HeroType.fromInt(t);
         Hero h = null;
-        switch (t) {
-            case 1: h = new HuntHero(name); break;
-            case 2: h = new DestructionHero(name); break;
-            case 3: h = new PreservationHero(name); break;
-            case 4: h = new HealerHero(name); break;
-            case 5: h = new SupportHero(name); break;
+
+        if (type != null) {
+            switch (type) {
+                case HUNT -> h = new HuntHero(name);
+                case DESTRUCTION -> h = new DestructionHero(name);
+                case PRESERVATION -> h = new PreservationHero(name);
+                case HEALER -> h = new HealerHero(name);
+                case SUPPORT -> h = new SupportHero(name);
+            }
+            manager.addHero(h);
+        } else {
+            System.out.println("Invalid type selected.");
         }
-        if (h != null) manager.addHero(h);
     }
 }
