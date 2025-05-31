@@ -3,19 +3,21 @@ import java.util.*;
 
 abstract class Hero {
     String name;
-    int hp, maxHp, attack, defense, speed;
+    int hp, maxHp, attack, defense, speed, skillVar, ultVar;
     int ultimateGauge = 0;
     int turnCount = 0;
     static int teamSkillPoints = 5;
     Scanner sc = new Scanner(System.in);
 
-    public Hero(String name, int hp, int attack, int defense, int speed) {
+    public Hero(String name, int hp, int attack, int defense, int speed, int skillVar, int ultVar) {
         this.name = name;
         this.hp = hp;
         this.maxHp = hp;
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
+        this.skillVar = skillVar;
+        this.ultVar = ultVar;
     }
 
     public boolean isAlive() {
