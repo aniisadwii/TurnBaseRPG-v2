@@ -10,69 +10,79 @@ public class GameApp {
 
     public static void main(String[] args) {
         while (true) {
-            System.out.println("\n-- HERO RPG GAME --");
-            System.out.println("1. Add Hero");
-            System.out.println("2. Show Heroes");
-            System.out.println("3. Edit Hero");
-            System.out.println("4. Delete Hero");
-            System.out.println("5. Build Team and Battle");
-            System.out.println("6. Exit");
-            System.out.print("Choose: ");
+            printMenu();
             int choice = sc.nextInt();
             sc.nextLine();
             switch (choice) {
-                case 1:
-                    addHero(); break;
-                case 2:
-                    manager.showHeroes(); break;
-                case 3:
-                    manager.showHeroes();
-                    System.out.print("Select index to edit: ");
-                    int i = sc.nextInt() - 1; sc.nextLine();
-                    System.out.print("New name: ");
-                    String newName = sc.nextLine();
-                    manager.editHeroName(i, newName); break;
-                case 4:
-                    manager.showHeroes();
-                    System.out.print("Index to delete: ");
-                    int del = sc.nextInt() - 1;
-                    manager.deleteHero(del); break;
-                case 5:
-                    List<Hero> team = teamBuilder.chooseTeam(manager.getHeroList(), sc);
-                    for (int lvl = 1; lvl <= 20; lvl++) {
-                        System.out.println("\n-- LEVEL " + lvl + " --");
-                        battle.startBattle(team, lvl);
-                        if (team.stream().noneMatch(Hero::isAlive)) break;
-                        for (Hero h : team) h.hp = h.maxHp;
-                    }
-                    break;
-                case 6:
-                    return;
+                case 1 -> handleAddHero();
+                case 2 -> manager.showHeroes();
+                case 3 -> handleEditHero();
+                case 4 -> handleDeleteHero();
+                case 5 -> handleBattle();
+                case 6 -> { return; }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }
+    
+    private static void printMenu() {
+        System.out.println("\n-- HERO RPG GAME --");
+        System.out.println("1. Add Hero");
+        System.out.println("2. Show Heroes");
+        System.out.println("3. Edit Hero");
+        System.out.println("4. Delete Hero");
+        System.out.println("5. Build Team and Battle");
+        System.out.println("6. Exit");
+        System.out.print("Choose: ");
+    }
+    
+    private static void handleEditHero() {
+        manager.showHeroes();
+        System.out.print("Select index to edit: ");
+        int i = sc.nextInt() - 1;
+        sc.nextLine();
+        System.out.print("New name: ");
+        String newName = sc.nextLine();
+        manager.editHeroName(i, newName);
+    }
+    
+    private static void handleDeleteHero() {
+        manager.showHeroes();
+        System.out.print("Index to delete: ");
+        int del = sc.nextInt() - 1;
+        sc.nextLine();
+        manager.deleteHero(del);
+    }
+    
+    private static void handleBattle() {
+        List<Hero> team = teamBuilder.chooseTeam(manager.getHeroList(), sc);
+        for (int lvl = 1; lvl <= 20; lvl++) {
+            System.out.println("\n-- LEVEL " + lvl + " --");
+            battle.startBattle(team, lvl);
+            if (team.stream().noneMatch(Hero::isAlive)) break;
+            for (Hero h : team) h.hp = h.maxHp;
+        }
+    }
 
-    private static void addHero() {
+    private static void handleAddHero() {
         System.out.print("Hero Name: ");
         String name = sc.nextLine();
-        System.out.println("Type: 1=Hunt 2=Destruction 3=Preservation 4=Healer 5=Support");
-        int t = sc.nextInt();
-        sc.nextLine();
 
-        HeroType type = HeroType.fromInt(t);
-        Hero h = null;
+        System.out.println("Choose Hero Type:");
+        for (int i = 0; i < HeroType.values().length; i++) {
+            System.out.printf("%d. %s%n", i + 1, HeroType.values()[i]);
+        }
 
-        if (type != null) {
-            switch (type) {
-                case HUNT -> h = new HuntHero(name);
-                case DESTRUCTION -> h = new DestructionHero(name);
-                case PRESERVATION -> h = new PreservationHero(name);
-                case HEALER -> h = new HealerHero(name);
-                case SUPPORT -> h = new SupportHero(name);
-            }
+        int input = sc.nextInt(); sc.nextLine();
+
+        HeroType type = HeroType.fromInt(input);
+        Hero h = manager.createHero(name, type);
+
+        if (h != null) {
             manager.addHero(h);
         } else {
-            System.out.println("Invalid type selected.");
+            System.out.println("Invalid type selected");
         }
+
     }
 }
