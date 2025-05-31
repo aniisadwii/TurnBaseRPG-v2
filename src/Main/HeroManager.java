@@ -1,7 +1,6 @@
 package Main;
 import java.util.*;
 
-
 class HeroManager {
     List<Hero> heroList = new ArrayList<>();
 
@@ -13,7 +12,7 @@ class HeroManager {
     public void showHeroes() {
         for (int i = 0; i < heroList.size(); i++) {
             Hero h = heroList.get(i);
-            System.out.println(i + 1 + ". " + h.name + " [" + h.getClass().getSimpleName() + "]");
+            System.out.println((i + 1) + ". " + h.name + " [" + h.getClass().getSimpleName() + "]");
         }
     }
 
@@ -33,4 +32,25 @@ class HeroManager {
             heroList.get(index).name = newName;
         }
     }
+
+    public Hero createHero(String name, HeroType type) {
+        if (type == null) return null;
+
+        switch (type) {
+            case HUNT:
+                return new HuntHero(name);
+            case DESTRUCTION:
+                return new DestructionHero(name);
+            case PRESERVATION:
+                return new PreservationHero(name);
+            case HEALER:
+                return new HealerHero(name);
+            case SUPPORT:
+                return new SupportHero(name);
+            default:
+                return null;
+        }
+    }
+
+
 }
