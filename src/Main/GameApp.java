@@ -6,7 +6,6 @@ public class GameApp {
     static HeroManager manager = new HeroManager();
     static TeamBuilder teamBuilder = new TeamBuilder();
     static BattleManager battle = new BattleManager();
-    static List<Hero> dummyTeam = DummyHeroFactory.createFiveTypeHeroes();
 
     public static void main(String[] args) {
         while (true) {
