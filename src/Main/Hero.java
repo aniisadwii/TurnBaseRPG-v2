@@ -4,7 +4,7 @@ import java.util.*;
 abstract class Hero {
     String name;
     int hp, maxHp, attack, defense, speed;
-    int ultimateGauge = 0;
+    double ultimateGauge = 0.0;
     int turnCount = 0;
     static int teamSkillPoints = 5;
     Scanner sc = new Scanner(System.in);
@@ -32,43 +32,50 @@ abstract class Hero {
     }
 
     public void printStatus() {
-        System.out.println(name + " [HP: " + hp + "/" + maxHp + ", ATK: " + attack + ", DEF: " + defense + ", SPD: " + speed + "]");
+        System.out.printf("%s [HP: %d/%d, ULT: %.1f/3.0]\n", name, hp, maxHp, ultimateGauge);
     }
 
     public void performAction(List<Hero> team, List<Monster> enemies) {
+        displayTeamStatus(team);
         System.out.println("\n-- " + name + "'s turn --");
         System.out.println("Team Skill Points: " + teamSkillPoints);
-        System.out.println("1. Basic Attack\n2. Skill (-1 SP)\n3. Ultimate (every 3rd turn)");
+        System.out.println("1. Basic Attack\n2. Skill (-1 SP)\n3. Ultimate (requires full gauge)");
         int choice = sc.nextInt();
         turnCount++;
 
         switch (choice) {
             case 1:
                 basicAttack(enemies);
+                ultimateGauge = Math.min(3.0, ultimateGauge + 0.5);
                 teamSkillPoints = Math.min(5, teamSkillPoints + 1);
                 break;
             case 2:
                 if (teamSkillPoints > 0) {
                     useSkill(team, enemies);
                     teamSkillPoints--;
+                    ultimateGauge = Math.min(3.0, ultimateGauge + 1.5);
                 } else {
                     System.out.println("Not enough Skill Points. Using Basic Attack instead.");
                     basicAttack(enemies);
+                    ultimateGauge = Math.min(3.0, ultimateGauge + 0.5);
                     teamSkillPoints = Math.min(5, teamSkillPoints + 1);
                 }
                 break;
             case 3:
-                if (turnCount % 3 == 0) {
+                if (ultimateGauge >= 3.0) {
                     useUltimate(team, enemies);
+                    ultimateGauge = 0.0;
                 } else {
-                    System.out.println("Ultimate only available every 3rd turn! Using Basic Attack instead.");
+                    System.out.println("Ultimate not ready! Using Basic Attack instead.");
                     basicAttack(enemies);
+                    ultimateGauge = Math.min(3.0, ultimateGauge + 0.5);
                     teamSkillPoints = Math.min(5, teamSkillPoints + 1);
                 }
                 break;
             default:
                 System.out.println("Invalid. Defaulting to Basic Attack.");
                 basicAttack(enemies);
+                ultimateGauge = Math.min(3.0, ultimateGauge + 0.5);
                 teamSkillPoints = Math.min(5, teamSkillPoints + 1);
         }
     }
@@ -112,11 +119,18 @@ abstract class Hero {
     public static void resetTeamSkillPoints() {
         teamSkillPoints = 5;
     }
-    
+
     public void restoreFullHealth() {
         this.hp = this.maxHp;
     }
 
+    private void displayTeamStatus(List<Hero> team) {
+        System.out.println("\n-- Team Status --");
+        for (Hero h : team) {
+            h.printStatus();
+        }
+        System.out.println("-------------------");
+    }
 
     public abstract void useSkill(List<Hero> team, List<Monster> enemies);
     public abstract void useUltimate(List<Hero> team, List<Monster> enemies);
