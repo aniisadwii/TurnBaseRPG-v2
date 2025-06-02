@@ -36,48 +36,74 @@ abstract class Hero {
     }
 
     public void performAction(List<Hero> team, List<Monster> enemies) {
+        if (!this.isAlive()) {
+            team.remove(this);
+            return;
+        }
         displayTeamStatus(team);
+        displayTurnInfo();
+        int choice = getPlayerChoice();
+        turnCount++;
+        handleActionChoice(choice, team, enemies);
+    }
+
+    private void displayTurnInfo() {
         System.out.println("\n-- " + name + "'s turn --");
         System.out.println("Team Skill Points: " + teamSkillPoints);
         System.out.println("1. Basic Attack\n2. Skill (-1 SP)\n3. Ultimate (requires full gauge)");
-        int choice = sc.nextInt();
-        turnCount++;
+    }
 
+    private int getPlayerChoice() {
+        return sc.nextInt();
+    }
+
+    private void handleActionChoice(int choice, List<Hero> team, List<Monster> enemies) {
         switch (choice) {
-            case 1:
-                basicAttack(enemies);
-                ultimateGauge = Math.min(3.0, ultimateGauge + 0.5);
-                teamSkillPoints = Math.min(5, teamSkillPoints + 1);
-                break;
-            case 2:
-                if (teamSkillPoints > 0) {
-                    useSkill(team, enemies);
-                    teamSkillPoints--;
-                    ultimateGauge = Math.min(3.0, ultimateGauge + 1.5);
-                } else {
-                    System.out.println("Not enough Skill Points. Using Basic Attack instead.");
-                    basicAttack(enemies);
-                    ultimateGauge = Math.min(3.0, ultimateGauge + 0.5);
-                    teamSkillPoints = Math.min(5, teamSkillPoints + 1);
-                }
-                break;
-            case 3:
-                if (ultimateGauge >= 3.0) {
-                    useUltimate(team, enemies);
-                    ultimateGauge = 0.0;
-                } else {
-                    System.out.println("Ultimate not ready! Using Basic Attack instead.");
-                    basicAttack(enemies);
-                    ultimateGauge = Math.min(3.0, ultimateGauge + 0.5);
-                    teamSkillPoints = Math.min(5, teamSkillPoints + 1);
-                }
-                break;
-            default:
-                System.out.println("Invalid. Defaulting to Basic Attack.");
-                basicAttack(enemies);
-                ultimateGauge = Math.min(3.0, ultimateGauge + 0.5);
-                teamSkillPoints = Math.min(5, teamSkillPoints + 1);
+            case 1 -> handleBasicAttack(enemies);
+            case 2 -> handleSkillAction(team, enemies);
+            case 3 -> handleUltimateAction(team, enemies);
+            default -> handleInvalidChoice(enemies);
         }
+    }
+
+    private void handleBasicAttack(List<Monster> enemies) {
+        basicAttack(enemies);
+        gainGaugeAndSkillPoint(0.5);
+    }
+
+    private void handleSkillAction(List<Hero> team, List<Monster> enemies) {
+        if (teamSkillPoints > 0) {
+            useSkill(team, enemies);
+            teamSkillPoints--;
+            ultimateGauge = Math.min(3.0, ultimateGauge + 1.5);
+        } else {
+            System.out.println("Not enough Skill Points. Using Basic Attack instead.");
+            handleBasicAttack(enemies);
+        }
+    }
+
+    private void handleUltimateAction(List<Hero> team, List<Monster> enemies) {
+        if (isUltimateReady()) {
+            useUltimate(team, enemies);
+            ultimateGauge = 0.0;
+        } else {
+            System.out.println("Ultimate not ready! Using Basic Attack instead.");
+            handleBasicAttack(enemies);
+        }
+    }
+
+    public boolean isUltimateReady() {
+        return ultimateGauge >= 3.0;
+    }
+
+    private void handleInvalidChoice(List<Monster> enemies) {
+        System.out.println("Invalid. Defaulting to Basic Attack.");
+        handleBasicAttack(enemies);
+    }
+
+    private void gainGaugeAndSkillPoint(double gaugeAmount) {
+        ultimateGauge = Math.min(3.0, ultimateGauge + gaugeAmount);
+        teamSkillPoints = Math.min(5, teamSkillPoints + 1);
     }
 
     public void basicAttack(List<Monster> enemies) {
