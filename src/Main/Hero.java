@@ -3,21 +3,19 @@ import java.util.*;
 
 abstract class Hero {
     String name;
-    int hp, maxHp, attack, defense, speed, skillVar, ultVar;
+    int hp, maxHp, attack, defense, speed;
     int ultimateGauge = 0;
     int turnCount = 0;
     static int teamSkillPoints = 5;
     Scanner sc = new Scanner(System.in);
 
-    public Hero(String name, int hp, int attack, int defense, int speed, int skillVar, int ultVar) {
+    public Hero(String name, int hp, int attack, int defense, int speed) {
         this.name = name;
         this.hp = hp;
         this.maxHp = hp;
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
-        this.skillVar = skillVar;
-        this.ultVar = ultVar;
     }
 
     public boolean isAlive() {
@@ -38,62 +36,41 @@ abstract class Hero {
     }
 
     public void performAction(List<Hero> team, List<Monster> enemies) {
-    	displayTurnInfo();
-        int choice = getPlayerChoice();
-        turnCount++;
-        handleActionChoice(choice, team, enemies);
-    }
-    
-    private void displayTurnInfo() {
         System.out.println("\n-- " + name + "'s turn --");
         System.out.println("Team Skill Points: " + teamSkillPoints);
         System.out.println("1. Basic Attack\n2. Skill (-1 SP)\n3. Ultimate (every 3rd turn)");
-    }
-    
-    private int getPlayerChoice() {
-        return sc.nextInt();
-    }
-    
-    private void handleActionChoice(int choice, List<Hero> team, List<Monster> enemies) {
+        int choice = sc.nextInt();
+        turnCount++;
+
         switch (choice) {
-            case 1: handleBasicAttack(enemies); break;
-            case 2: handleSkillAction(team, enemies); break;
-            case 3: handleUltimateAction(team, enemies); break;
-            default: handleInvalidChoice(enemies);
+            case 1:
+                basicAttack(enemies);
+                teamSkillPoints = Math.min(5, teamSkillPoints + 1);
+                break;
+            case 2:
+                if (teamSkillPoints > 0) {
+                    useSkill(team, enemies);
+                    teamSkillPoints--;
+                } else {
+                    System.out.println("Not enough Skill Points. Using Basic Attack instead.");
+                    basicAttack(enemies);
+                    teamSkillPoints = Math.min(5, teamSkillPoints + 1);
+                }
+                break;
+            case 3:
+                if (turnCount % 3 == 0) {
+                    useUltimate(team, enemies);
+                } else {
+                    System.out.println("Ultimate only available every 3rd turn! Using Basic Attack instead.");
+                    basicAttack(enemies);
+                    teamSkillPoints = Math.min(5, teamSkillPoints + 1);
+                }
+                break;
+            default:
+                System.out.println("Invalid. Defaulting to Basic Attack.");
+                basicAttack(enemies);
+                teamSkillPoints = Math.min(5, teamSkillPoints + 1);
         }
-    }
-    
-    private void handleBasicAttack(List<Monster> enemies) {
-        basicAttack(enemies);
-        teamSkillPoints = Math.min(5, teamSkillPoints + 1);
-    }
-    
-    private void handleSkillAction(List<Hero> team, List<Monster> enemies) {
-        if (teamSkillPoints > 0) {
-            useSkill(team, enemies);
-            teamSkillPoints--;
-        } else {
-            System.out.println("Not enough Skill Points. Using Basic Attack instead.");
-            handleBasicAttack(enemies);
-        }
-    }
-    
-    private void handleUltimateAction(List<Hero> team, List<Monster> enemies) {
-        if (isUltimateReady()) { 
-            useUltimate(team, enemies);
-        } else {
-            System.out.println("Ultimate only available every 3rd turn! Using Basic Attack instead.");
-            handleBasicAttack(enemies);
-        }
-    }
-    
-    public boolean isUltimateReady() { 
-        return turnCount % 3 == 0;
-    }
-    
-    private void handleInvalidChoice(List<Monster> enemies) {
-        System.out.println("Invalid. Defaulting to Basic Attack.");
-        handleBasicAttack(enemies);
     }
 
     public void basicAttack(List<Monster> enemies) {
@@ -135,6 +112,11 @@ abstract class Hero {
     public static void resetTeamSkillPoints() {
         teamSkillPoints = 5;
     }
+    
+    public void restoreFullHealth() {
+        this.hp = this.maxHp;
+    }
+
 
     public abstract void useSkill(List<Hero> team, List<Monster> enemies);
     public abstract void useUltimate(List<Hero> team, List<Monster> enemies);
