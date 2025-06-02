@@ -34,12 +34,15 @@ public class TurnManager {
     }
 
     private static void handleMonsterTurn(Monster monster, List<Hero> team, int level) {
-        for (Hero hero : team) {
-            if (hero.isAlive()) {
-                System.out.println("\n[Wave " + level + "] " + monster.name + " attacks " + hero.name);
-                monster.attackHero(hero);
-                break;
-            }
+        List<Hero> aliveHeroes = team.stream()
+                                     .filter(Hero::isAlive)
+                                     .toList();
+
+        if (!aliveHeroes.isEmpty()) {
+            Hero target = aliveHeroes.get(new Random().nextInt(aliveHeroes.size()));
+            System.out.println("\n[Wave " + level + "] " + monster.name + " attacks " + target.name);
+            monster.attackHero(target);
         }
     }
+
 }
