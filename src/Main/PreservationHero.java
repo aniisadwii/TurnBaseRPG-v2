@@ -3,7 +3,7 @@ import java.util.*;
 
 class PreservationHero extends Hero {
     public PreservationHero(String name) {
-        super(name, 180, 15, 30, 10);
+        super(name, 180, 15, 30, 10, 10, 20);
     }
 
     public void useSkill(List<Hero> team, List<Monster> enemies) {
