@@ -6,7 +6,7 @@ import java.util.*;
 public class TurnManager {
     public static void executeTurns(List<Object> queue, List<Hero> team, List<Monster> monsters, int level) {
         for (Object obj : queue) {
-            if (!isBattleOngoing(team, monsters)) return;
+            if (!BattleHelper.isBattleOngoing(team, monsters)) return;
 
             if (obj instanceof Hero hero && hero.isAlive()) {
                 handleHeroTurn(hero, team, monsters, level);
@@ -14,10 +14,6 @@ public class TurnManager {
                 handleMonsterTurn(monster, team, level);
             }
         }
-    }
-
-    private static boolean isBattleOngoing(List<Hero> team, List<Monster> monsters) {
-        return team.stream().anyMatch(Hero::isAlive) && monsters.stream().anyMatch(Monster::isAlive);
     }
 
     private static void handleHeroTurn(Hero hero, List<Hero> team, List<Monster> monsters, int level) {

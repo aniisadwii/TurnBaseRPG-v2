@@ -16,12 +16,8 @@ public class BattleManager {
     }
 
     private void battleLoop(List<Hero> team, List<Monster> monsters, List<Object> turnQueue, int level) {
-        while (isBattleOngoing(team, monsters)) {
+        while (BattleHelper.isBattleOngoing(team, monsters)) {
             TurnManager.executeTurns(turnQueue, team, monsters, level);
         }
-    }
-
-    private boolean isBattleOngoing(List<Hero> team, List<Monster> monsters) {
-        return team.stream().anyMatch(Hero::isAlive) && monsters.stream().anyMatch(Monster::isAlive);
     }
 }
