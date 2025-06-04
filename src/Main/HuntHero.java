@@ -7,7 +7,7 @@ class HuntHero extends Hero {
     }
 
     public void useSkill(List<Hero> team, List<Monster> enemies) {
-        Monster target = selectTarget(enemies);
+        Monster target = TargetSelector.selectMonsterTarget(enemies);
         if (target != null) {
             System.out.println(name + " uses Sniper Shot on " + target.name);
             target.takeDamage(attack + skillVar);
@@ -15,7 +15,7 @@ class HuntHero extends Hero {
     }
 
     public void useUltimate(List<Hero> team, List<Monster> enemies) {
-        Monster target = selectTarget(enemies);
+        Monster target = TargetSelector.selectMonsterTarget(enemies);
         if (target != null) {
             System.out.println(name + " uses Deadeye on " + target.name);
             target.takeDamage(attack + ultVar);

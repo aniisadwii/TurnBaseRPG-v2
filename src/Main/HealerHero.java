@@ -7,7 +7,7 @@ class HealerHero extends Hero {
     }
 
     public void useSkill(List<Hero> team, List<Monster> enemies) {
-        Hero target = selectAlly(team);
+        Hero target = TargetSelector.selectAllyTarget(team);
         if (target != null) {
             System.out.println(name + " heals " + target.name + " for 30 HP.");
             target.heal(skillVar);
@@ -17,8 +17,8 @@ class HealerHero extends Hero {
     public void useUltimate(List<Hero> team, List<Monster> enemies) {
         System.out.println(name + " uses Full Recovery!");
         for (Hero h : team) {
-        	h.maxHp += skillVar;
-        	h.heal(ultVar);
+            h.maxHp += skillVar;
+            h.heal(ultVar);
         }
     }
 }

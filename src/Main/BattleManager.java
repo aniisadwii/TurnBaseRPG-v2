@@ -6,7 +6,7 @@ import java.util.*;
 public class BattleManager {
     public void startBattle(List<Hero> team, int level) {
         List<Monster> monsters = MonsterFactory.createMonsters(level);
-        Hero.resetTeamSkillPoints();
+        TeamSkillPointManager.resetTeamSkillPoints();
 
         List<Object> turnQueue = TurnQueueBuilder.build(team, monsters);
 
