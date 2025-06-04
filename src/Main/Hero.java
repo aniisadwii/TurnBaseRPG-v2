@@ -3,40 +3,37 @@ import java.util.*;
 
 abstract class Hero {
     String name;
-    int hp, maxHp, attack, defense, speed, skillVar, ultVar;
+    Stats stats;
+    int skillVar, ultVar;
     double ultimateGauge = 0.0;
     int turnCount = 0;
 
     public Hero(String name, int hp, int attack, int defense, int speed, int skillVar, int ultVar) {
         this.name = name;
-        this.hp = hp;
-        this.maxHp = hp;
-        this.attack = attack;
-        this.defense = defense;
-        this.speed = speed;
+        this.stats = new Stats(hp, hp, attack, defense, speed);
         this.skillVar = skillVar;
         this.ultVar = ultVar;
     }
 
     public boolean isAlive() {
-        return hp > 0;
+        return stats.hp > 0;
     }
 
     public void takeDamage(int dmg) {
-        hp -= Math.max(1, dmg - defense);
-        if (hp < 0) hp = 0;
+        stats.hp -= Math.max(1, dmg - stats.defense);
+        if (stats.hp < 0) stats.hp = 0;
     }
 
     public void heal(int amount) {
-        hp = Math.min(maxHp, hp + amount);
+        stats.hp = Math.min(stats.maxHp, stats.hp + amount);
     }
 
     public void printStatus() {
-        System.out.printf("%s [HP: %d/%d, ULT: %.1f/3.0]\n", name, hp, maxHp, ultimateGauge);
+        System.out.printf("%s [HP: %d/%d, ULT: %.1f/3.0]\n", name, stats.hp, stats.maxHp, ultimateGauge);
     }
 
     public void restoreFullHealth() {
-        this.hp = this.maxHp;
+        this.stats.hp = this.stats.maxHp;
     }
 
     public boolean isUltimateReady() {
@@ -55,7 +52,7 @@ abstract class Hero {
         Monster target = TargetSelector.selectMonsterTarget(enemies);
         if (target != null) {
             System.out.println(name + " attacks " + target.name);
-            target.takeDamage(attack);
+            target.takeDamage(stats.attack);
         }
     }
 
