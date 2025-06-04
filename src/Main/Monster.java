@@ -3,31 +3,28 @@ import java.util.*;
 
 class Monster {
     String name;
-    int hp, attack, defense, speed;
+    Stats stats;
 
     public Monster(String name, int hp, int atk, int def, int spd) {
         this.name = name;
-        this.hp = hp;
-        this.attack = atk;
-        this.defense = def;
-        this.speed = spd;
+        this.stats = new Stats(hp, hp, atk, def, spd);
     }
 
     public boolean isAlive() {
-        return hp > 0;
+        return stats.hp > 0;
     }
 
     public void takeDamage(int dmg) {
-        hp -= Math.max(1, dmg - defense);
-        if (hp < 0) hp = 0;
+        stats.hp -= Math.max(1, dmg - stats.defense);
+        if (stats.hp < 0) stats.hp = 0;
     }
 
     public void attackHero(Hero h) {
         System.out.println(name + " attacks " + h.name);
-        h.takeDamage(attack);
+        h.takeDamage(stats.attack);
     }
 
     public void printStatus() {
-        System.out.println(name + " [HP: " + hp + "]");
+        System.out.println(name + " [HP: " + stats.hp + "]");
     }
 }
