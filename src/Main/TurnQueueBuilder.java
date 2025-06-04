@@ -8,8 +8,8 @@ public class TurnQueueBuilder {
         turnQueue.addAll(team);
         turnQueue.addAll(monsters);
         turnQueue.sort(Comparator.comparingInt(o -> {
-            if (o instanceof Hero) return -((Hero) o).speed;
-            else return -((Monster) o).speed;
+            if (o instanceof Hero) return -((Hero) o).stats.speed;
+            else return -((Monster) o).stats.speed;
         }));
         return turnQueue;
     }
