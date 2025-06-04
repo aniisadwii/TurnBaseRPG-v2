@@ -10,7 +10,7 @@ class HuntHero extends Hero {
         Monster target = TargetSelector.selectMonsterTarget(enemies);
         if (target != null) {
             System.out.println(name + " uses Sniper Shot on " + target.name);
-            target.takeDamage(attack + skillVar);
+            target.takeDamage(stats.attack + skillVar);
         }
     }
 
@@ -18,7 +18,7 @@ class HuntHero extends Hero {
         Monster target = TargetSelector.selectMonsterTarget(enemies);
         if (target != null) {
             System.out.println(name + " uses Deadeye on " + target.name);
-            target.takeDamage(attack + ultVar);
+            target.takeDamage(stats.attack + ultVar);
         }
     }
 }
