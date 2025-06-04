@@ -8,11 +8,11 @@ class DestructionHero extends Hero {
 
     public void useSkill(List<Hero> team, List<Monster> enemies) {
         System.out.println(name + " casts Flame Wave on all enemies!");
-        for (Monster m : enemies) if (m.isAlive()) m.takeDamage(attack + skillVar);
+        for (Monster m : enemies) if (m.isAlive()) m.takeDamage(stats.attack + skillVar);
     }
 
     public void useUltimate(List<Hero> team, List<Monster> enemies) {
         System.out.println(name + " casts Inferno Blast!");
-        for (Monster m : enemies) if (m.isAlive()) m.takeDamage(attack + ultVar);
+        for (Monster m : enemies) if (m.isAlive()) m.takeDamage(stats.attack + ultVar);
     }
 }
