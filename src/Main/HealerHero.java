@@ -17,7 +17,7 @@ class HealerHero extends Hero {
     public void useUltimate(List<Hero> team, List<Monster> enemies) {
         System.out.println(name + " uses Full Recovery!");
         for (Hero h : team) {
-            h.maxHp += skillVar;
+            h.stats.maxHp += skillVar;
             h.heal(ultVar);
         }
     }
