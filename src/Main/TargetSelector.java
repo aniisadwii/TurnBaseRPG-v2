@@ -41,14 +41,14 @@ public class TargetSelector {
     private static void displayMonsterTargets(List<Monster> alive) {
         System.out.println("Choose a target:");
         for (int i = 0; i < alive.size(); i++) {
-            System.out.println((i + 1) + ". " + alive.get(i).name + " [HP: " + alive.get(i).hp + "]");
+            System.out.println((i + 1) + ". " + alive.get(i).name + " [HP: " + alive.get(i).stats.hp + "]");
         }
     }
 
     private static void displayAllyTargets(List<Hero> alive) {
         System.out.println("Choose an ally:");
         for (int i = 0; i < alive.size(); i++) {
-            System.out.println((i + 1) + ". " + alive.get(i).name + " [HP: " + alive.get(i).hp + "]");
+            System.out.println((i + 1) + ". " + alive.get(i).name + " [HP: " + alive.get(i).stats.hp + "]");
         }
     }
 }
