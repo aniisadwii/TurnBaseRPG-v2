@@ -19,20 +19,11 @@ public class GameApp {
                 case SHOW_HEROES -> heroController.showHeroes();
                 case EDIT_HERO -> heroController.editHero(sc);
                 case DELETE_HERO -> heroController.deleteHero(sc);
-                case BATTLE -> handleBattle();
+                case BATTLE -> battle.handleBattle(teamBuilder, manager, sc); // ← pass dependencies here
                 case EXIT -> { return; }
                 case INVALID -> System.out.println("Invalid choice.");
             }
         }
     }
-
-    private static void handleBattle() {
-        List<Hero> team = teamBuilder.chooseTeam(manager.getHeroList(), sc);
-        for (int lvl = 1; lvl <= 20; lvl++) {
-            System.out.println("\n-- LEVEL " + lvl + " --");
-            battle.startBattle(team, lvl);
-            if (team.stream().noneMatch(Hero::isAlive)) break;
-            for (Hero h : team) h.restoreFullHealth();
-        }
-    }
 }
+
