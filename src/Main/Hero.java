@@ -48,25 +48,25 @@ abstract class Hero {
         ultimateGauge = 0.0;
     }
 
-    public void basicAttack(List<Monster> enemies) {
-        Monster target = TargetSelector.selectMonsterTarget(enemies);
+    public void basicAttack(BattleContext context) {
+        Monster target = TargetSelector.selectMonsterTarget(context.getAliveEnemies());
         if (target != null) {
             System.out.println(name + " attacks " + target.name);
             target.takeDamage(stats.attack);
         }
     }
 
-    public void performAction(List<Hero> team, List<Monster> enemies) {
+    public void performAction(BattleContext context) {
         if (!this.isAlive()) {
-            team.remove(this);
+            context.removeDeadHero(this);
             return;
         }
         
         HeroActionHandler handler = new HeroActionHandler(this);
-        handler.handleTurn(team, enemies);
+        handler.handleTurn(context);
         turnCount++;
     }
 
-    public abstract void useSkill(List<Hero> team, List<Monster> enemies);
-    public abstract void useUltimate(List<Hero> team, List<Monster> enemies);
+    public abstract void useSkill(BattleContext context);
+    public abstract void useUltimate(BattleContext context);
 }

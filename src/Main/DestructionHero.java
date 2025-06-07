@@ -6,13 +6,17 @@ class DestructionHero extends Hero {
         super(name, 120, 30, 15, 20, 0, 20);
     }
 
-    public void useSkill(List<Hero> team, List<Monster> enemies) {
+    public void useSkill(BattleContext context) {
         System.out.println(name + " casts Flame Wave on all enemies!");
-        for (Monster m : enemies) if (m.isAlive()) m.takeDamage(stats.attack + skillVar);
+        for (Monster m : context.getAliveEnemies()) {
+            m.takeDamage(stats.attack + skillVar);
+        }
     }
 
-    public void useUltimate(List<Hero> team, List<Monster> enemies) {
+    public void useUltimate(BattleContext context) {
         System.out.println(name + " casts Inferno Blast!");
-        for (Monster m : enemies) if (m.isAlive()) m.takeDamage(stats.attack + ultVar);
+        for (Monster m : context.getAliveEnemies()) {
+            m.takeDamage(stats.attack + ultVar);
+        }
     }
 }

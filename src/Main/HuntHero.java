@@ -6,16 +6,16 @@ class HuntHero extends Hero {
         super(name, 100, 35, 10, 30, 10, 25);
     }
 
-    public void useSkill(List<Hero> team, List<Monster> enemies) {
-        Monster target = TargetSelector.selectMonsterTarget(enemies);
+    public void useSkill(BattleContext context) {
+        Monster target = TargetSelector.selectMonsterTarget(context.getAliveEnemies());
         if (target != null) {
             System.out.println(name + " uses Sniper Shot on " + target.name);
             target.takeDamage(stats.attack + skillVar);
         }
     }
 
-    public void useUltimate(List<Hero> team, List<Monster> enemies) {
-        Monster target = TargetSelector.selectMonsterTarget(enemies);
+    public void useUltimate(BattleContext context) {
+        Monster target = TargetSelector.selectMonsterTarget(context.getAliveEnemies());
         if (target != null) {
             System.out.println(name + " uses Deadeye on " + target.name);
             target.takeDamage(stats.attack + ultVar);

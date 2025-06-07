@@ -9,56 +9,56 @@ public class HeroActionHandler {
         this.hero = hero;
     }
 
-    public void handleTurn(List<Hero> team, List<Monster> enemies) {
-        HeroBattleUI.displayTeamStatus(team);
+    public void handleTurn(BattleContext context) {
+        HeroBattleUI.displayTeamStatus(context.getTeam());
         HeroBattleUI.displayTurnInfo(hero);
         
         int choice = getPlayerChoice();
-        handleActionChoice(choice, team, enemies);
+        handleActionChoice(choice, context);
     }
 
     private int getPlayerChoice() {
         return sc.nextInt();
     }
 
-    private void handleActionChoice(int choice, List<Hero> team, List<Monster> enemies) {
+    private void handleActionChoice(int choice, BattleContext context) {
         switch (choice) {
-            case 1 -> handleBasicAttack(enemies);
-            case 2 -> handleSkillAction(team, enemies);
-            case 3 -> handleUltimateAction(team, enemies);
-            default -> handleInvalidChoice(enemies);
+            case 1 -> handleBasicAttack(context);
+            case 2 -> handleSkillAction(context);
+            case 3 -> handleUltimateAction(context);
+            default -> handleInvalidChoice(context);
         }
     }
 
-    private void handleBasicAttack(List<Monster> enemies) {
-        hero.basicAttack(enemies);
+    private void handleBasicAttack(BattleContext context) {
+        hero.basicAttack(context);
         hero.gainUltimateGauge(0.5);
         TeamSkillPointManager.gainSkillPoint();
     }
 
-    private void handleSkillAction(List<Hero> team, List<Monster> enemies) {
+    private void handleSkillAction(BattleContext context) {
         if (TeamSkillPointManager.canUseSkill()) {
-            hero.useSkill(team, enemies);
+            hero.useSkill(context);
             TeamSkillPointManager.useSkillPoint();
             hero.gainUltimateGauge(1.5);
         } else {
             System.out.println("Not enough Skill Points. Using Basic Attack instead.");
-            handleBasicAttack(enemies);
+            handleBasicAttack(context);
         }
     }
 
-    private void handleUltimateAction(List<Hero> team, List<Monster> enemies) {
+    private void handleUltimateAction(BattleContext context) {
         if (hero.isUltimateReady()) {
-            hero.useUltimate(team, enemies);
+            hero.useUltimate(context);
             hero.resetUltimateGauge();
         } else {
             System.out.println("Ultimate not ready! Using Basic Attack instead.");
-            handleBasicAttack(enemies);
+            handleBasicAttack(context);
         }
     }
 
-    private void handleInvalidChoice(List<Monster> enemies) {
+    private void handleInvalidChoice(BattleContext context) {
         System.out.println("Invalid. Defaulting to Basic Attack.");
-        handleBasicAttack(enemies);
+        handleBasicAttack(context);
     }
 }
