@@ -18,10 +18,10 @@ The *Turn-Based RPG* is a Java-based game where players control a team of heroes
 
 All team members contributed to the codebase, report, and presentation. Contributions are also reflected in the commit history.
 
-- [@DanielHyoryno](https://github.com/DanielHyoryno)
-- [@aniisadwii](https://github.com/aniisadwii)
-- [@SnailPastes](https://github.com/SnailPastes)
-- [@ve-ltn](https://github.com/ve-ltn)
+- [@DanielHyoryno](https://github.com/DanielHyoryno) - Daniel Hyoryno Thenaka
+- [@aniisadwii](https://github.com/aniisadwii) - Anisa Dwi Lestari
+- [@SnailPastes](https://github.com/SnailPastes) - Clarence Rafael Halenson
+- [@ve-ltn](https://github.com/ve-ltn) - Evelyn Litanayu
 
 ---
 
